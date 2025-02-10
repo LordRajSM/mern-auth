@@ -1,20 +1,21 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Header = () => {
+export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser, "currentUser");
   return (
     <div className="bg-slate-200">
-      <div className="flex justify-between items-center max-w-6xl mx-auto p-4">
+      <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Link to="/">
-          <h1 className="text-2xl font-bold ">Auth App</h1>
+          <h1 className="font-bold">Auth App</h1>
         </Link>
-        <ul className="flex gap-x-4">
-          <Link to="/" className="text-slate-800 hover:text-slate-900">
-            Home
+        <ul className="flex gap-4">
+          <Link to="/">
+            <li>Home</li>
           </Link>
-          <Link to="/about" className="text-slate-800 hover:text-slate-900">
-            About
+          <Link to="/about">
+            <li>About</li>
           </Link>
           <Link to="/profile">
             {currentUser ? (
@@ -31,6 +32,4 @@ const Header = () => {
       </div>
     </div>
   );
-};
-
-export default Header;
+}
