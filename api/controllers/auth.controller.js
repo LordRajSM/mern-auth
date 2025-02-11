@@ -19,7 +19,7 @@ export const signup = async (req, res, next) => {
             message: 'User created successfully'
         });
     } catch (error) {
-        next(errorHandler(500, error.message));
+        next(errorHandler(500, error));
     }
 
 }
@@ -42,7 +42,7 @@ export const signin = async (req, res, next) => {
 
         res.cookie('access_token', token, { httpOnly: true, expires: expiryDate }).status(200).json({ rest });
     } catch (error) {
-        next(errorHandler(500, error.message));
+        next(errorHandler(500, error));
     }
 }
 
@@ -88,4 +88,8 @@ export const google = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+export const signout = (req, res) => {
+    res.clearCookie('access_token').json({ message: 'Signout successful' });
 };

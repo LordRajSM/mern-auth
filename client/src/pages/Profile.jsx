@@ -1,15 +1,15 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
-} from "../redux/user/userSlice";
-import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOut,
 } from "../redux/user/userSlice";
 // import {
 //   getDownloadURL,
@@ -22,6 +22,7 @@ import {
 const Profile = () => {
   const dispatch = useDispatch();
   const fileRef = useRef();
+  const navigate = useNavigate();
   const [image, setImage] = useState(undefined);
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
@@ -76,6 +77,21 @@ const Profile = () => {
       dispatch(deleteUserSuccess());
     } catch (error) {
       dispatch(deleteUserFailure(error));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      dispatch(signOut());
+      navigate("/signin");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -156,7 +172,9 @@ const Profile = () => {
         >
           Delete Account
         </span>
-        <span className="text-red-700 cursor-pointer">Sign out</span>
+        <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
+          Sign out
+        </span>
       </div>
       <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
       <p className="text-green-700 mt-5">
